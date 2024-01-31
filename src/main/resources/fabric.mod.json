@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "elytrapitch",
+	"version": "${version}",
+	"name": "Elytra Pitch",
+	"description": "Adds a HUD element for the player's pitch during elytra flight.",
+	"authors": [
+		"FatalFlare"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/project/elytrapitch",
+		"sources": "https://github.com/kennethsible/elytrapitch"
+	},
+	"license": "MIT",
+	"icon": "assets/elytrapitch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"fatalflare.elytrapitch.ElytraPitch"
+		],
+		"modmenu": [
+			"fatalflare.elytrapitch.ModMenuIntegration"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.15.3",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"fabric-key-binding-api-v1": "*",
+		"cloth-config": ">=11.1.118"
+	},
+	"suggests": {
+		"modmenu": ">=7.2.2"
+	}
+}
