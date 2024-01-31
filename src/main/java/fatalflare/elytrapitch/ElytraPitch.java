@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class ElytraPitch implements ModInitializer {
     public static final String MOD_ID = "elytrapitch";
+	public static final String MOD_NAME = "Elytra Pitch";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static KeyBinding keyBinding;
 	private static boolean togglePitch = true;
@@ -34,7 +35,7 @@ public class ElytraPitch implements ModInitializer {
 				"Toggle Pitch",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_H,
-				"Flight HUD"
+				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding.wasPressed()) {
@@ -47,28 +48,43 @@ public class ElytraPitch implements ModInitializer {
 
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
-			if (player == null || !player.isFallFlying()) return;
+			if (player == null || !player.isFallFlying() || !togglePitch) return;
+
+			int indicatorWidth, textColor;
+			boolean showIndicator, textShadow;
+			ScreenPosition screenPosition;
+			MinecraftClient minecraft = MinecraftClient.getInstance();
+			if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
+				showIndicator = config.showIndicatorTP;
+				indicatorWidth = config.indicatorWidthTP;
+				textColor = config.textColorTP;
+				textShadow = config.textShadowTP;
+				screenPosition = config.screenPositionTP;
+			} else {
+				showIndicator = config.showIndicatorFP;
+				indicatorWidth = config.indicatorWidthFP;
+				textColor = config.textColorFP;
+				textShadow = config.textShadowFP;
+				screenPosition = config.screenPositionFP;
+			}
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
-			if (Math.abs(Math.abs(pitch) - 45) <= config.indicatorWidth)
+			if (showIndicator && Math.abs(Math.abs(pitch) - 45) <= indicatorWidth)
 				displayString = "[ " + displayString + " ]";
 
-			MinecraftClient minecraft = MinecraftClient.getInstance();
-			TextRenderer textRenderer = minecraft.textRenderer;
 			Window mainWindow = minecraft.getWindow();
-
+			TextRenderer textRenderer = minecraft.textRenderer;
 			int xWidth = minecraft.textRenderer.getWidth(displayString);
 			int yHeight = minecraft.textRenderer.fontHeight;
 			int xPos = (mainWindow.getScaledWidth() - xWidth) / 2;
-			int yPos = switch (config.screenPosition) {
+			int yPos = switch (screenPosition) {
 				case BOTTOM_CENTER -> mainWindow.getScaledHeight() - yHeight * 10;
 				case MIDDLE_CENTER -> mainWindow.getScaledHeight() / 2 - yHeight * 5;
 				case TOP_CENTER -> yHeight * 5;
             };
 
-            if (togglePitch)
-				drawContext.drawText(textRenderer, displayString, xPos, yPos, 0xffffff, true);
+			drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
 		});
 	}
 }

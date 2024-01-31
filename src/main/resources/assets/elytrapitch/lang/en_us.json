@@ -1,5 +1,15 @@
 {
-  "text.autoconfig.elytrapitch.title": "Flight HUD Settings",
-  "text.autoconfig.elytrapitch.option.screenPosition": "Screen Position",
-  "text.autoconfig.elytrapitch.option.indicatorWidth": "Indicator Width"
+  "text.autoconfig.elytrapitch.title": "Elytra Pitch Settings",
+  "text.autoconfig.elytrapitch.category.FP": "First Person",
+  "text.autoconfig.elytrapitch.category.TP": "Third Person",
+  "text.autoconfig.elytrapitch.option.screenPositionFP": "Screen Position",
+  "text.autoconfig.elytrapitch.option.screenPositionTP": "Screen Position",
+  "text.autoconfig.elytrapitch.option.showIndicatorFP": "Show Indicator",
+  "text.autoconfig.elytrapitch.option.showIndicatorTP": "Show Indicator",
+  "text.autoconfig.elytrapitch.option.indicatorWidthFP": "Indicator Width",
+  "text.autoconfig.elytrapitch.option.indicatorWidthTP": "Indicator Width",
+  "text.autoconfig.elytrapitch.option.textColorFP": "Text Color",
+  "text.autoconfig.elytrapitch.option.textColorTP": "Text Color",
+  "text.autoconfig.elytrapitch.option.textShadowFP": "Text Shadow",
+  "text.autoconfig.elytrapitch.option.textShadowTP": "Text Shadow"
 }
