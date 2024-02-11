@@ -19,28 +19,44 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option=EnumDisplayOption.BUTTON)
     ScreenPosition screenPositionFP = ScreenPosition.BOTTOM_CENTER;
     @ConfigEntry.Category("FP")
-    boolean showIndicatorFP = true;
+    boolean optimalIndicatorFP = true;
     @ConfigEntry.Category("FP")
     @ConfigEntry.BoundedDiscrete(min=0, max=45)
-    int indicatorWidthFP = 5;
+    int indicatorRangeFP = 5;
     @ConfigEntry.Category("FP")
     @ConfigEntry.ColorPicker()
     int textColorFP = 0xffffff;
     @ConfigEntry.Category("FP")
     boolean textShadowFP = true;
+    @ConfigEntry.Category("FP")
+    boolean showYawFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showAltitudeFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showVelocityFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showDirectionFP = false;
 
     // Third Person Settings
     @ConfigEntry.Category("TP")
     @ConfigEntry.Gui.EnumHandler(option=EnumDisplayOption.BUTTON)
     ScreenPosition screenPositionTP = ScreenPosition.MIDDLE_CENTER;
     @ConfigEntry.Category("TP")
-    boolean showIndicatorTP = true;
+    boolean optimalIndicatorTP = true;
     @ConfigEntry.Category("TP")
     @ConfigEntry.BoundedDiscrete(min=0, max=45)
-    int indicatorWidthTP = 5;
+    int indicatorRangeTP = 5;
     @ConfigEntry.Category("TP")
     @ConfigEntry.ColorPicker()
     int textColorTP = 0xffffff;
     @ConfigEntry.Category("TP")
     boolean textShadowTP = true;
+    @ConfigEntry.Category("TP")
+    boolean showYawTP = false;
+    @ConfigEntry.Category("TP")
+    boolean showAltitudeTP = false;
+    @ConfigEntry.Category("TP")
+    boolean showVelocityTP = false;
+    @ConfigEntry.Category("TP")
+    boolean showDirectionTP = false;
 }

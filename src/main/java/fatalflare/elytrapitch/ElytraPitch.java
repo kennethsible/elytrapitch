@@ -50,27 +50,63 @@ public class ElytraPitch implements ModInitializer {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null || !player.isFallFlying() || !togglePitch) return;
 
-			int indicatorWidth, textColor;
-			boolean showIndicator, textShadow;
-			ScreenPosition screenPosition;
 			MinecraftClient minecraft = MinecraftClient.getInstance();
+			ScreenPosition screenPosition;
+			int indicatorRange, textColor;
+			boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection;
 			if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
-				showIndicator = config.showIndicatorTP;
-				indicatorWidth = config.indicatorWidthTP;
+				screenPosition = config.screenPositionTP;
+				optimalIndicator = config.optimalIndicatorTP;
+				indicatorRange = config.indicatorRangeTP;
 				textColor = config.textColorTP;
 				textShadow = config.textShadowTP;
-				screenPosition = config.screenPositionTP;
+				showYaw = config.showYawTP;
+				showVelocity = config.showVelocityTP;
+				showAltitude = config.showAltitudeTP;
+				showDirection = config.showDirectionTP;
 			} else {
-				showIndicator = config.showIndicatorFP;
-				indicatorWidth = config.indicatorWidthFP;
+				screenPosition = config.screenPositionFP;
+				optimalIndicator = config.optimalIndicatorFP;
+				indicatorRange = config.indicatorRangeFP;
 				textColor = config.textColorFP;
 				textShadow = config.textShadowFP;
-				screenPosition = config.screenPositionFP;
+				showYaw = config.showYawFP;
+				showVelocity = config.showVelocityFP;
+				showAltitude = config.showAltitudeFP;
+				showDirection = config.showDirectionFP;
 			}
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
-			if (showIndicator && Math.abs(Math.abs(pitch) - 45) <= indicatorWidth)
+			if (showYaw) {
+				int yaw = (int) player.getYaw();
+				if (yaw > 180)
+					yaw -= 360;
+				else if (yaw < -180)
+					yaw += 360;
+				displayString += " " + yaw + "°";
+			} if (showAltitude) {
+				int altitude = (int) player.getY() - player.getWorld().getSeaLevel();
+				displayString += " " + altitude + "m";
+			} if (showVelocity) {
+				int velocity = (int) (player.getVelocity().length() * 20);
+				displayString += " " + velocity + "㎧";
+			} if (showDirection)
+				switch(player.getMovementDirection().getName()) {
+					case "north":
+						displayString += " N";
+						break;
+					case "south":
+						displayString += " S";
+						break;
+					case "east":
+						displayString += " E";
+						break;
+					case "west":
+						displayString += " W";
+						break;
+				}
+			if (optimalIndicator && Math.abs(Math.abs(pitch) - 40) <= indicatorRange)
 				displayString = "[ " + displayString + " ]";
 
 			Window mainWindow = minecraft.getWindow();
