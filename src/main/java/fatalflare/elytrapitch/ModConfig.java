@@ -59,4 +59,12 @@ class ModConfig implements ConfigData {
     boolean showVelocityTP = false;
     @ConfigEntry.Category("TP")
     boolean showDirectionTP = false;
+
+    // Flight Settings
+    @ConfigEntry.Category("flightAngles")
+    int ascendAngle = -40;
+    @ConfigEntry.Category("flightAngles")
+    int descendAngle = 40;
+    @ConfigEntry.Category("flightAngles")
+    int glideAngle = 0;
 }
