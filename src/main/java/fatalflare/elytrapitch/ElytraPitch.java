@@ -23,32 +23,80 @@ public class ElytraPitch implements ModInitializer {
     public static final String MOD_ID = "elytrapitch";
 	public static final String MOD_NAME = "Elytra Pitch";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	private static KeyBinding keyBinding;
+	private static KeyBinding keyBinding1;
+	private static KeyBinding keyBinding2;
+	private static KeyBinding keyBinding3;
+	private static KeyBinding keyBinding4;
 	private static boolean togglePitch = true;
+	private static boolean pitchLocked = false;
+	private float lockedPitch;
 
 	@Override
 	public void onInitialize() {
 		AutoConfig.register(ModConfig.class, Toml4jConfigSerializer::new);
 		ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
-		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+		keyBinding1 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"Toggle Pitch",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_H,
 				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (keyBinding.wasPressed()) {
+			while (keyBinding1.wasPressed()) {
 				togglePitch = !togglePitch;
-				String message = togglePitch ? "Pitch On" : "Pitch Off";
-				if (client.player != null)
-					client.player.sendMessage(Text.literal(message), true);
+//				String message = togglePitch ? "Pitch On" : "Pitch Off";
+//				if (client.player != null)
+//					client.player.sendMessage(Text.literal(message), true);
+			}
+		});
+
+		keyBinding2 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"Lock Pitch",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_R,
+				MOD_NAME
+		));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (keyBinding2.wasPressed()) {
+				pitchLocked = !pitchLocked;
+				if (client.player != null && pitchLocked)
+					lockedPitch = client.player.getPitch();
+			}
+		});
+
+		keyBinding3 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"Snap Up",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_B,
+				MOD_NAME
+		));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (keyBinding3.wasPressed()) {
+				if (client.player != null && client.player.isFallFlying())
+					if (pitchLocked) lockedPitch = -40;
+					else client.player.setPitch(-40);
+			}
+		});
+
+		keyBinding4 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"Snap Down",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_V,
+				MOD_NAME
+		));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (keyBinding4.wasPressed()) {
+				if (client.player != null && client.player.isFallFlying())
+					if (pitchLocked) lockedPitch = 40;
+					else client.player.setPitch(40);
 			}
 		});
 
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null || !player.isFallFlying() || !togglePitch) return;
+			if (pitchLocked) player.setPitch(lockedPitch);
 
 			MinecraftClient minecraft = MinecraftClient.getInstance();
 			ScreenPosition screenPosition;
@@ -78,7 +126,9 @@ public class ElytraPitch implements ModInitializer {
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
-			if (showYaw) {
+			if (pitchLocked) {
+				displayString = "(" + displayString + ")";
+			} if (showYaw) {
 				int yaw = (int) player.getYaw();
 				if (yaw > 180)
 					yaw -= 360;
