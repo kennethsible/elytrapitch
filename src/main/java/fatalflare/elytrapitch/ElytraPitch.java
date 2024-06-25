@@ -27,6 +27,7 @@ public class ElytraPitch implements ModInitializer {
 	private static KeyBinding keyBinding2;
 	private static KeyBinding keyBinding3;
 	private static KeyBinding keyBinding4;
+	private static KeyBinding keyBinding5;
 	private static boolean togglePitch = true;
 	private static boolean pitchLocked = false;
 	private float lockedPitch;
@@ -66,7 +67,7 @@ public class ElytraPitch implements ModInitializer {
 		});
 
 		keyBinding3 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"Snap Up",
+				"Snap to Ascend",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_B,
 				MOD_NAME
@@ -74,13 +75,13 @@ public class ElytraPitch implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding3.wasPressed()) {
 				if (client.player != null && client.player.isFallFlying())
-					if (pitchLocked) lockedPitch = -40;
-					else client.player.setPitch(-40);
+					if (pitchLocked) lockedPitch = config.ascendAngle;
+					else client.player.setPitch(config.ascendAngle);
 			}
 		});
 
 		keyBinding4 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"Snap Down",
+				"Snap to Descend",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_V,
 				MOD_NAME
@@ -88,8 +89,22 @@ public class ElytraPitch implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding4.wasPressed()) {
 				if (client.player != null && client.player.isFallFlying())
-					if (pitchLocked) lockedPitch = 40;
-					else client.player.setPitch(40);
+					if (pitchLocked) lockedPitch = config.descendAngle;
+					else client.player.setPitch(config.descendAngle);
+			}
+		});
+
+		keyBinding5 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"Snap to Glide",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_N,
+				MOD_NAME
+		));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (keyBinding5.wasPressed()) {
+				if (client.player != null && client.player.isFallFlying())
+					if (pitchLocked) lockedPitch = config.glideAngle;
+					else client.player.setPitch(config.glideAngle);
 			}
 		});
 
@@ -156,7 +171,8 @@ public class ElytraPitch implements ModInitializer {
 						displayString += " W";
 						break;
 				}
-			if (optimalIndicator && Math.abs(Math.abs(pitch) - 40) <= indicatorRange)
+			int optimalPitch = pitch > 0 ? config.descendAngle : config.ascendAngle;
+			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= indicatorRange)
 				displayString = "[ " + displayString + " ]";
 
 			Window mainWindow = minecraft.getWindow();
