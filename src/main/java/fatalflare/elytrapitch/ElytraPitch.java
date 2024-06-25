@@ -46,9 +46,9 @@ public class ElytraPitch implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding1.wasPressed()) {
 				togglePitch = !togglePitch;
-//				String message = togglePitch ? "Pitch On" : "Pitch Off";
-//				if (client.player != null)
-//					client.player.sendMessage(Text.literal(message), true);
+				String message = togglePitch ? "Pitch On" : "Pitch Off";
+				if (client.player != null && config.toggleMessages)
+					client.player.sendMessage(Text.literal(message), true);
 			}
 		});
 
@@ -61,8 +61,13 @@ public class ElytraPitch implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding2.wasPressed()) {
 				pitchLocked = !pitchLocked;
-				if (client.player != null && pitchLocked)
-					lockedPitch = client.player.getPitch();
+				String message = pitchLocked ? "Pitch Locked" : "Pitch Unlocked";
+				if (client.player != null && config.assistedFlight) {
+					if (pitchLocked)
+						lockedPitch = client.player.getPitch();
+					if (config.toggleMessages)
+						client.player.sendMessage(Text.literal(message), true);
+				}
 			}
 		});
 
@@ -74,7 +79,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding3.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.ascendAngle;
 					else client.player.setPitch(config.ascendAngle);
 			}
@@ -88,7 +93,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding4.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.descendAngle;
 					else client.player.setPitch(config.descendAngle);
 			}
@@ -102,7 +107,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding5.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.glideAngle;
 					else client.player.setPitch(config.glideAngle);
 			}
@@ -111,7 +116,8 @@ public class ElytraPitch implements ModInitializer {
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null || !player.isFallFlying() || !togglePitch) return;
-			if (pitchLocked) player.setPitch(lockedPitch);
+			if (config.assistedFlight && pitchLocked)
+				player.setPitch(lockedPitch);
 
 			MinecraftClient minecraft = MinecraftClient.getInstance();
 			ScreenPosition screenPosition;
@@ -141,7 +147,7 @@ public class ElytraPitch implements ModInitializer {
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
-			if (pitchLocked) {
+			if (config.assistedFlight && pitchLocked) {
 				displayString = "(" + displayString + ")";
 			} if (showYaw) {
 				int yaw = (int) player.getYaw();
