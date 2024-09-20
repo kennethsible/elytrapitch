@@ -60,6 +60,7 @@ class ModConfig implements ConfigData {
 
     // Flight Settings
     @ConfigEntry.Category("flightSettings")
+    @ConfigEntry.Gui.PrefixText
     int ascendAngle = -40;
     @ConfigEntry.Category("flightSettings")
     int descendAngle = 40;
@@ -69,11 +70,11 @@ class ModConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min=0, max=45)
     int indicatorWidth = 5;
     @ConfigEntry.Category("flightSettings")
-    @ConfigEntry.Gui.Tooltip
-    boolean assistedFlight = true;
-    @ConfigEntry.Category("flightSettings")
-    double durabilityWarning = 0.05;
+    @ConfigEntry.Gui.PrefixText
+    double durabilityThreshold = 0.05;
     @ConfigEntry.Category("flightSettings")
     @ConfigEntry.ColorPicker()
-    int warningTextColor = 0xbe0000;
+    int messageColor = 0xbe0000;
+    @ConfigEntry.Category("flightSettings")
+    boolean boldMessage = true;
 }

@@ -15,13 +15,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.DecimalFormat;
 
 public class ElytraPitch implements ModInitializer {
     public static final String MOD_ID = "elytrapitch";
@@ -43,7 +42,7 @@ public class ElytraPitch implements ModInitializer {
 		ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
 		keyBinding1 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"Toggle Pitch",
+				"Toggle Flight HUD",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_H,
 				MOD_NAME
@@ -58,16 +57,16 @@ public class ElytraPitch implements ModInitializer {
 		});
 
 		keyBinding2 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"Lock Pitch",
+				"Toggle Pitch Lock",
 				InputUtil.Type.KEYSYM,
-				GLFW.GLFW_KEY_R,
+				GLFW.GLFW_KEY_UNKNOWN,
 				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding2.wasPressed()) {
 				pitchLocked = !pitchLocked;
 				String message = pitchLocked ? "Flight Pitch Locked" : "Flight Pitch Unlocked";
-				if (client.player != null && config.assistedFlight) {
+				if (client.player != null) {
 					if (pitchLocked)
 						lockedPitch = client.player.getPitch();
 					if (client.player != null)
@@ -79,12 +78,12 @@ public class ElytraPitch implements ModInitializer {
 		keyBinding3 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"Snap to Ascend",
 				InputUtil.Type.KEYSYM,
-				GLFW.GLFW_KEY_B,
+				GLFW.GLFW_KEY_UNKNOWN,
 				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding3.wasPressed()) {
-				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
+				if (client.player != null && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.ascendAngle;
 					else client.player.setPitch(config.ascendAngle);
 			}
@@ -93,12 +92,12 @@ public class ElytraPitch implements ModInitializer {
 		keyBinding4 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"Snap to Descend",
 				InputUtil.Type.KEYSYM,
-				GLFW.GLFW_KEY_V,
+				GLFW.GLFW_KEY_UNKNOWN,
 				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding4.wasPressed()) {
-				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
+				if (client.player != null && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.descendAngle;
 					else client.player.setPitch(config.descendAngle);
 			}
@@ -107,25 +106,24 @@ public class ElytraPitch implements ModInitializer {
 		keyBinding5 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"Snap to Glide",
 				InputUtil.Type.KEYSYM,
-				GLFW.GLFW_KEY_N,
+				GLFW.GLFW_KEY_UNKNOWN,
 				MOD_NAME
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding5.wasPressed()) {
-				if (client.player != null && config.assistedFlight && client.player.isFallFlying())
+				if (client.player != null && client.player.isFallFlying())
 					if (pitchLocked) lockedPitch = config.glideAngle;
 					else client.player.setPitch(config.glideAngle);
 			}
 		});
 
-		DecimalFormat df = new DecimalFormat("#.#");
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null || !player.isFallFlying() || !togglePitch) {
 				if (inFlight) inFlight = false;
 				return;
 			}
-			if (config.assistedFlight && pitchLocked) {
+			if (pitchLocked) {
 				if (!inFlight) {
 					lockedPitch = player.getPitch();
 					inFlight = true;
@@ -161,7 +159,7 @@ public class ElytraPitch implements ModInitializer {
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
-			if (config.assistedFlight && pitchLocked) {
+			if (pitchLocked) {
 				displayString = "(" + displayString + ")";
 			} if (showYaw) {
 				int yaw = (int) player.getYaw() % 180;
@@ -193,21 +191,23 @@ public class ElytraPitch implements ModInitializer {
 						displayString += " W";
 						break;
 				}
-			} if (showDurability) {
-				ItemStack elytraItem = null;
-				for (ItemStack stack : player.getArmorItems()) {
-					if (stack.getName().getString().equals("Elytra"))
-						elytraItem = stack;
+			}
+
+			ItemStack elytraItem = null;
+			for (ItemStack stack : player.getArmorItems())
+				if (stack.getItem() == Items.ELYTRA)
+					elytraItem = stack;
+			if (elytraItem != null) {
+				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
+				if (durability < config.durabilityThreshold) {
+					MutableText text = Text.literal("Elytra Durability Warning");
+					text.setStyle(text.getStyle().withColor(config.messageColor));
+					if (config.boldMessage)
+						text.setStyle(text.getStyle().withBold(true));
+					player.sendMessage(text, true);
 				}
-				if (elytraItem != null) {
-					double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
-					if (durability < config.durabilityWarning) {
-						MutableText text = Text.literal("Elytra Durability Warning");
-						text.setStyle(text.getStyle().withColor(config.warningTextColor).withBold(true));
-						player.sendMessage(text, true);
-					}
-					displayString += " " + df.format(durability * 100) + "%";
-				}
+				if (showDurability)
+					displayString += " " + String.format("%.1f", durability * 100) + "%";
 			}
 			int optimalPitch = pitch > 0 ? config.descendAngle : config.ascendAngle;
 			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= config.indicatorWidth)
