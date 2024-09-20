@@ -9,11 +9,12 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/project/elytrapitch",
-		"sources": "https://github.com/kennethsible/elytrapitch"
+		"sources": "https://github.com/kennethsible/elytrapitch",
+		"issues": "https://github.com/kennethsible/elytrapitch/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/elytrapitch/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
 			"fatalflare.elytrapitch.ElytraPitch"

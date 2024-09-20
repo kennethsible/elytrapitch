@@ -9,3 +9,4 @@ If a player is flying at 40-degree angles with the elytra, they can maintain the
 - ElytraPitch 1.2.0 added optional HUD elements for yaw, altitude, speed, and direction.
 - ElytraPitch 1.3.0 added keybindings to lock the player's pitch and snap to the optimal angle.
 - ElytraPitch 1.3.1 added settings for flight angles, toggle messages and assisted flight.
+- ElytraPitch 1.4.0 added an optional HUD element for durability and a warning message.

@@ -21,9 +21,6 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("FP")
     boolean optimalIndicatorFP = true;
     @ConfigEntry.Category("FP")
-    @ConfigEntry.BoundedDiscrete(min=0, max=45)
-    int indicatorRangeFP = 5;
-    @ConfigEntry.Category("FP")
     @ConfigEntry.ColorPicker()
     int textColorFP = 0xffffff;
     @ConfigEntry.Category("FP")
@@ -36,6 +33,8 @@ class ModConfig implements ConfigData {
     boolean showVelocityFP = false;
     @ConfigEntry.Category("FP")
     boolean showDirectionFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showDurabilityFP = false;
 
     // Third Person Settings
     @ConfigEntry.Category("TP")
@@ -43,9 +42,6 @@ class ModConfig implements ConfigData {
     ScreenPosition screenPositionTP = ScreenPosition.MIDDLE_CENTER;
     @ConfigEntry.Category("TP")
     boolean optimalIndicatorTP = true;
-    @ConfigEntry.Category("TP")
-    @ConfigEntry.BoundedDiscrete(min=0, max=45)
-    int indicatorRangeTP = 5;
     @ConfigEntry.Category("TP")
     @ConfigEntry.ColorPicker()
     int textColorTP = 0xffffff;
@@ -59,6 +55,8 @@ class ModConfig implements ConfigData {
     boolean showVelocityTP = false;
     @ConfigEntry.Category("TP")
     boolean showDirectionTP = false;
+    @ConfigEntry.Category("TP")
+    boolean showDurabilityTP = false;
 
     // Flight Settings
     @ConfigEntry.Category("flightSettings")
@@ -69,9 +67,14 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("flightSettings")
     int glideAngle = 0;
     @ConfigEntry.Category("flightSettings")
-    @ConfigEntry.Gui.PrefixText
-    boolean toggleMessages = true;
+    @ConfigEntry.BoundedDiscrete(min=0, max=45)
+    int indicatorWidth = 5;
     @ConfigEntry.Category("flightSettings")
     @ConfigEntry.Gui.PrefixText
-    boolean assistedFlight = false;
+    double durabilityThreshold = 0.05;
+    @ConfigEntry.Category("flightSettings")
+    @ConfigEntry.ColorPicker()
+    int messageColor = 0xbe0000;
+    @ConfigEntry.Category("flightSettings")
+    boolean boldMessage = true;
 }
