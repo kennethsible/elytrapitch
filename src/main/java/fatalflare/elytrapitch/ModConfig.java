@@ -26,6 +26,8 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("FP")
     boolean textShadowFP = true;
     @ConfigEntry.Category("FP")
+    String hudDelimiterFP = "";
+    @ConfigEntry.Category("FP")
     boolean showYawFP = false;
     @ConfigEntry.Category("FP")
     boolean showAltitudeFP = false;
@@ -35,6 +37,8 @@ class ModConfig implements ConfigData {
     boolean showDirectionFP = false;
     @ConfigEntry.Category("FP")
     boolean showDurabilityFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showElytraIconFP = true;
 
     // Third Person Settings
     @ConfigEntry.Category("TP")
@@ -48,6 +52,8 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("TP")
     boolean textShadowTP = true;
     @ConfigEntry.Category("TP")
+    String hudDelimiterTP = "";
+    @ConfigEntry.Category("TP")
     boolean showYawTP = false;
     @ConfigEntry.Category("TP")
     boolean showAltitudeTP = false;
@@ -57,6 +63,8 @@ class ModConfig implements ConfigData {
     boolean showDirectionTP = false;
     @ConfigEntry.Category("TP")
     boolean showDurabilityTP = false;
+    @ConfigEntry.Category("TP")
+    boolean showElytraIconTP = true;
 
     // Flight Settings
     @ConfigEntry.Category("flightSettings")
@@ -72,6 +80,8 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("flightSettings")
     @ConfigEntry.Gui.PrefixText
     double durabilityThreshold = 0.05;
+    @ConfigEntry.Category("flightSettings")
+    boolean durabilityPercentage = true;
     @ConfigEntry.Category("flightSettings")
     @ConfigEntry.ColorPicker()
     int messageColor = 0xbe0000;
