@@ -1,5 +1,8 @@
 package fatalflare.elytrapitch;
 
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -18,9 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Pair;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 public class ElytraPitch implements ModInitializer {
     public static final String MOD_ID = "elytrapitch";
@@ -133,32 +139,38 @@ public class ElytraPitch implements ModInitializer {
 
 			MinecraftClient minecraft = MinecraftClient.getInstance();
 			ScreenPosition screenPosition;
+			String hudDelimiter;
 			int textColor;
-			boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection, showDurability;
+			boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection, showDurability, showElytraIcon;
 			if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
 				screenPosition = config.screenPositionTP;
 				optimalIndicator = config.optimalIndicatorTP;
 				textColor = config.textColorTP;
 				textShadow = config.textShadowTP;
+				hudDelimiter = config.hudDelimiterTP;
 				showYaw = config.showYawTP;
 				showVelocity = config.showVelocityTP;
 				showAltitude = config.showAltitudeTP;
 				showDirection = config.showDirectionTP;
 				showDurability = config.showDurabilityTP;
+				showElytraIcon = config.showElytraIconTP;
 			} else {
 				screenPosition = config.screenPositionFP;
 				optimalIndicator = config.optimalIndicatorFP;
 				textColor = config.textColorFP;
 				textShadow = config.textShadowFP;
+				hudDelimiter = config.hudDelimiterFP;
 				showYaw = config.showYawFP;
 				showVelocity = config.showVelocityFP;
 				showAltitude = config.showAltitudeFP;
 				showDirection = config.showDirectionFP;
 				showDurability = config.showDurabilityFP;
+				showElytraIcon = config.showElytraIconFP;
 			}
 
 			int pitch = (int) player.getPitch();
 			String displayString = pitch + "°";
+			String delimiterString = hudDelimiter.isEmpty() ? " " : " " + hudDelimiter + " ";
 			if (pitchLocked) {
 				displayString = "(" + displayString + ")";
 			} if (showYaw) {
@@ -169,26 +181,26 @@ public class ElytraPitch implements ModInitializer {
 					else
 						yaw += 180;
 				}
-				displayString += " " + yaw + "°";
+				displayString += delimiterString + yaw + "°";
 			} if (showAltitude) {
 				int altitude = (int) player.getY() - player.getWorld().getSeaLevel();
-				displayString += " " + altitude + "m";
+				displayString += delimiterString + altitude + "m";
 			} if (showVelocity) {
 				int velocity = (int) (player.getVelocity().length() * 20);
-				displayString += " " + velocity + "㎧";
+				displayString += delimiterString + velocity + "㎧";
 			} if (showDirection) {
 				switch (player.getMovementDirection().getName()) {
 					case "north":
-						displayString += " N";
+						displayString += delimiterString + "N";
 						break;
 					case "south":
-						displayString += " S";
+						displayString += delimiterString + "S";
 						break;
 					case "east":
-						displayString += " E";
+						displayString += delimiterString + "E";
 						break;
 					case "west":
-						displayString += " W";
+						displayString += delimiterString + "W";
 						break;
 				}
 			}
@@ -197,6 +209,10 @@ public class ElytraPitch implements ModInitializer {
 			for (ItemStack stack : player.getArmorItems())
 				if (stack.getItem() == Items.ELYTRA)
 					elytraItem = stack;
+			Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
+			if (component.isPresent())
+				for (Pair<SlotReference, ItemStack> pair: component.get().getEquipped(Items.ELYTRA))
+					elytraItem = pair.getRight();
 			if (elytraItem != null) {
 				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
 				if (durability < config.durabilityThreshold) {
@@ -206,8 +222,14 @@ public class ElytraPitch implements ModInitializer {
 						text.setStyle(text.getStyle().withBold(true));
 					player.sendMessage(text, true);
 				}
-				if (showDurability)
-					displayString += " " + String.format("%.1f", durability * 100) + "%";
+				if (showDurability) {
+					if (config.durabilityPercentage)
+						displayString += delimiterString + String.format("%.1f", durability * 100) + "%";
+					else if (elytraItem.getDamage() > 0)
+						displayString += delimiterString + "-" + elytraItem.getDamage();
+					else
+						displayString += delimiterString + elytraItem.getDamage();
+				}
 			}
 			int optimalPitch = pitch > 0 ? config.descendAngle : config.ascendAngle;
 			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= config.indicatorWidth)
@@ -224,7 +246,11 @@ public class ElytraPitch implements ModInitializer {
 				case TOP_CENTER -> yHeight * 5;
             };
 
-			drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
+			if (showElytraIcon) {
+				drawContext.drawText(textRenderer, displayString, xPos - 8, yPos, textColor, textShadow);
+				drawContext.drawItem(elytraItem, xPos + xWidth - 4, yPos - 4);
+			} else
+				drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
 		});
 	}
 }

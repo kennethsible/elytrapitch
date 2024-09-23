@@ -3,7 +3,7 @@
 	"id": "elytrapitch",
 	"version": "${version}",
 	"name": "Elytra Pitch",
-	"description": "Adds a HUD element for the player's pitch during elytra flight.",
+	"description": "Adds an elytra HUD for maintaining optimal pitch.",
 	"authors": [
 		"FatalFlare"
 	],
@@ -33,6 +33,7 @@
 		"cloth-config": ">=11.1.118"
 	},
 	"suggests": {
-		"modmenu": ">=7.2.2"
+		"modmenu": ">=7.2.2",
+		"trinkets": ">=3.7.2"
 	}
 }
