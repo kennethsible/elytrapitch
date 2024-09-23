@@ -10,6 +10,7 @@
   "text.autoconfig.elytrapitch.option.indicatorWidth": "Indicator Width",
   "text.autoconfig.elytrapitch.option.durabilityThreshold.@PrefixText": "Warning Message for Low Durability",
   "text.autoconfig.elytrapitch.option.durabilityThreshold": "Durability Threshold",
+  "text.autoconfig.elytrapitch.option.durabilityPercentage": "Durability Percentage",
   "text.autoconfig.elytrapitch.option.messageColor": "Message Color",
   "text.autoconfig.elytrapitch.option.boldMessage": "Bold Message",
   "text.autoconfig.elytrapitch.option.screenPositionFP": "Screen Position",
@@ -20,6 +21,8 @@
   "text.autoconfig.elytrapitch.option.textColorTP": "Text Color",
   "text.autoconfig.elytrapitch.option.textShadowFP": "Text Shadow",
   "text.autoconfig.elytrapitch.option.textShadowTP": "Text Shadow",
+  "text.autoconfig.elytrapitch.option.hudDelimiterFP": "HUD Delimiter",
+  "text.autoconfig.elytrapitch.option.hudDelimiterTP": "HUD Delimiter",
   "text.autoconfig.elytrapitch.option.showYawFP": "Show Yaw",
   "text.autoconfig.elytrapitch.option.showYawTP": "Show Yaw",
   "text.autoconfig.elytrapitch.option.showAltitudeFP": "Show Altitude",
@@ -29,5 +32,7 @@
   "text.autoconfig.elytrapitch.option.showDirectionFP": "Show Direction",
   "text.autoconfig.elytrapitch.option.showDirectionTP": "Show Direction",
   "text.autoconfig.elytrapitch.option.showDurabilityFP": "Show Durability",
-  "text.autoconfig.elytrapitch.option.showDurabilityTP": "Show Durability"
+  "text.autoconfig.elytrapitch.option.showDurabilityTP": "Show Durability",
+  "text.autoconfig.elytrapitch.option.showElytraIconFP": "Show Elytra Icon",
+  "text.autoconfig.elytrapitch.option.showElytraIconTP": "Show Elytra Icon"
 }
