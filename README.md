@@ -10,4 +10,5 @@ If the player is flying at 40-degree angles with the elytra, they can maintain t
 - ElytraPitch 1.3.0 added keybindings to lock the player's pitch and snap to the optimal angle.
 - ElytraPitch 1.3.1 added settings for flight angles, toggle messages and assisted flight.
 - ElytraPitch 1.4.0 added an optional HUD element for durability and a warning message.
-- ElytraPitch 1.4.1 added Trinkets support, a HUD delimiter, and an (optional) elytra icon.
+- ElytraPitch 1.4.1 added [Trinkets](https://modrinth.com/mod/trinkets) support (_e.g._, [Elytra Slot]([https://modrinth.com/mod/elytra-slot](https://modrinth.com/mod/elytra-slot))) and an optional HUD delimiter.
+- ElytraPitch 1.4.2 fixed crashes due to the absence of [Trinkets](https://modrinth.com/mod/trinkets) and/or presence of [Origins](https://modrinth.com/mod/origins).

@@ -38,7 +38,7 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("FP")
     boolean showDurabilityFP = false;
     @ConfigEntry.Category("FP")
-    boolean showElytraIconFP = true;
+    boolean showElytraItemFP = false;
 
     // Third Person Settings
     @ConfigEntry.Category("TP")
@@ -64,7 +64,7 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("TP")
     boolean showDurabilityTP = false;
     @ConfigEntry.Category("TP")
-    boolean showElytraIconTP = true;
+    boolean showElytraItemTP = false;
 
     // Flight Settings
     @ConfigEntry.Category("flightSettings")

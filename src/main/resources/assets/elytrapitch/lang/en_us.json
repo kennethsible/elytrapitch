@@ -33,6 +33,6 @@
   "text.autoconfig.elytrapitch.option.showDirectionTP": "Show Direction",
   "text.autoconfig.elytrapitch.option.showDurabilityFP": "Show Durability",
   "text.autoconfig.elytrapitch.option.showDurabilityTP": "Show Durability",
-  "text.autoconfig.elytrapitch.option.showElytraIconFP": "Show Elytra Icon",
-  "text.autoconfig.elytrapitch.option.showElytraIconTP": "Show Elytra Icon"
+  "text.autoconfig.elytrapitch.option.showElytraItemFP": "Show Elytra Item",
+  "text.autoconfig.elytrapitch.option.showElytraItemTP": "Show Elytra Item"
 }
