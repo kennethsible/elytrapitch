@@ -1,12 +1,10 @@
 package fatalflare.elytrapitch;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.option.KeyBinding;
@@ -21,12 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 public class ElytraPitch implements ModInitializer {
     public static final String MOD_ID = "elytrapitch";
@@ -141,7 +136,7 @@ public class ElytraPitch implements ModInitializer {
 			ScreenPosition screenPosition;
 			String hudDelimiter;
 			int textColor;
-			boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection, showDurability, showElytraIcon;
+			boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection, showDurability, showElytraItem;
 			if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
 				screenPosition = config.screenPositionTP;
 				optimalIndicator = config.optimalIndicatorTP;
@@ -153,7 +148,7 @@ public class ElytraPitch implements ModInitializer {
 				showAltitude = config.showAltitudeTP;
 				showDirection = config.showDirectionTP;
 				showDurability = config.showDurabilityTP;
-				showElytraIcon = config.showElytraIconTP;
+				showElytraItem = config.showElytraItemTP;
 			} else {
 				screenPosition = config.screenPositionFP;
 				optimalIndicator = config.optimalIndicatorFP;
@@ -165,7 +160,7 @@ public class ElytraPitch implements ModInitializer {
 				showAltitude = config.showAltitudeFP;
 				showDirection = config.showDirectionFP;
 				showDurability = config.showDurabilityFP;
-				showElytraIcon = config.showElytraIconFP;
+				showElytraItem = config.showElytraItemFP;
 			}
 
 			int pitch = (int) player.getPitch();
@@ -209,10 +204,8 @@ public class ElytraPitch implements ModInitializer {
 			for (ItemStack stack : player.getArmorItems())
 				if (stack.getItem() == Items.ELYTRA)
 					elytraItem = stack;
-			Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
-			if (component.isPresent())
-				for (Pair<SlotReference, ItemStack> pair: component.get().getEquipped(Items.ELYTRA))
-					elytraItem = pair.getRight();
+			if (FabricLoader.getInstance().isModLoaded("trinkets"))
+				elytraItem = TrinketsIntegration.getElytraItem(player);
 			if (elytraItem != null) {
 				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
 				if (durability < config.durabilityThreshold) {
@@ -246,9 +239,10 @@ public class ElytraPitch implements ModInitializer {
 				case TOP_CENTER -> yHeight * 5;
             };
 
-			if (showElytraIcon) {
+			if (showElytraItem) {
 				drawContext.drawText(textRenderer, displayString, xPos - 8, yPos, textColor, textShadow);
-				drawContext.drawItem(elytraItem, xPos + xWidth - 4, yPos - 4);
+				if (elytraItem != null)
+					drawContext.drawItem(elytraItem, xPos + xWidth - 4, yPos - 4);
 			} else
 				drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
 		});
