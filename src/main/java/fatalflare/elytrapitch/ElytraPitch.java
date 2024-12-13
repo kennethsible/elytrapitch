@@ -201,11 +201,12 @@ public class ElytraPitch implements ModInitializer {
 			}
 
 			ItemStack elytraItem = null;
-			for (ItemStack stack : player.getArmorItems())
-				if (stack.getItem() == Items.ELYTRA)
-					elytraItem = stack;
 			if (FabricLoader.getInstance().isModLoaded("trinkets"))
 				elytraItem = TrinketsIntegration.getElytraItem(player);
+			if (elytraItem == null)
+				for (ItemStack stack : player.getArmorItems())
+					if (stack.getItem() == Items.ELYTRA)
+						elytraItem = stack;
 			if (elytraItem != null) {
 				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
 				if (durability < config.durabilityThreshold) {
@@ -239,12 +240,9 @@ public class ElytraPitch implements ModInitializer {
 				case TOP_CENTER -> yHeight * 5;
             };
 
-			if (showElytraItem) {
-				drawContext.drawText(textRenderer, displayString, xPos - 8, yPos, textColor, textShadow);
-				if (elytraItem != null)
-					drawContext.drawItem(elytraItem, xPos + xWidth - 4, yPos - 4);
-			} else
-				drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
+			if (showElytraItem && elytraItem != null)
+				drawContext.drawItem(elytraItem, (mainWindow.getScaledWidth() - 16) / 2, yPos - 16);
+			drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
 		});
 	}
 }
