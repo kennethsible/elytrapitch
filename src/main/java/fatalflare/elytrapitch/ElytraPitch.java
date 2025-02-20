@@ -4,7 +4,6 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.option.KeyBinding;
@@ -84,7 +83,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding3.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && client.player.isGliding())
 					if (pitchLocked) lockedPitch = config.ascendAngle;
 					else client.player.setPitch(config.ascendAngle);
 			}
@@ -98,7 +97,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding4.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && client.player.isGliding())
 					if (pitchLocked) lockedPitch = config.descendAngle;
 					else client.player.setPitch(config.descendAngle);
 			}
@@ -112,7 +111,7 @@ public class ElytraPitch implements ModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (keyBinding5.wasPressed()) {
-				if (client.player != null && client.player.isFallFlying())
+				if (client.player != null && client.player.isGliding())
 					if (pitchLocked) lockedPitch = config.glideAngle;
 					else client.player.setPitch(config.glideAngle);
 			}
@@ -120,7 +119,7 @@ public class ElytraPitch implements ModInitializer {
 
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			PlayerEntity player = MinecraftClient.getInstance().player;
-			if (player == null || !player.isFallFlying() || !togglePitch) {
+			if (player == null || !player.isGliding() || !togglePitch) {
 				if (inFlight) inFlight = false;
 				return;
 			}
@@ -201,12 +200,9 @@ public class ElytraPitch implements ModInitializer {
 			}
 
 			ItemStack elytraItem = null;
-			if (FabricLoader.getInstance().isModLoaded("trinkets"))
-				elytraItem = TrinketsIntegration.getElytraItem(player);
-			if (elytraItem == null)
-				for (ItemStack stack : player.getArmorItems())
-					if (stack.getItem() == Items.ELYTRA)
-						elytraItem = stack;
+			for (ItemStack stack : player.getArmorItems())
+				if (stack.getItem() == Items.ELYTRA)
+					elytraItem = stack;
 			if (elytraItem != null) {
 				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
 				if (durability < config.durabilityThreshold) {
