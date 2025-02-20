@@ -26,13 +26,13 @@
 	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.2",
+		"minecraft": "~1.21.4",
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-key-binding-api-v1": "*",
-		"cloth-config": ">=16.0.141"
+		"cloth-config": ">=17.0.144"
 	},
 	"suggests": {
-		"modmenu": ">=12.0.0"
+		"modmenu": ">=13.0.0"
 	}
 }
