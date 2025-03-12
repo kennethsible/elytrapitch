@@ -139,8 +139,8 @@ public class ElytraPitch implements ModInitializer {
 			if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
 				screenPosition = config.screenPositionTP;
 				optimalIndicator = config.optimalIndicatorTP;
-				textColor = config.textColorTP;
-				textShadow = config.textShadowTP;
+				textColor = config.hudColorTP;
+				textShadow = config.hudShadowTP;
 				hudDelimiter = config.hudDelimiterTP;
 				showYaw = config.showYawTP;
 				showVelocity = config.showVelocityTP;
@@ -151,8 +151,8 @@ public class ElytraPitch implements ModInitializer {
 			} else {
 				screenPosition = config.screenPositionFP;
 				optimalIndicator = config.optimalIndicatorFP;
-				textColor = config.textColorFP;
-				textShadow = config.textShadowFP;
+				textColor = config.hudColorFP;
+				textShadow = config.hudShadowFP;
 				hudDelimiter = config.hudDelimiterFP;
 				showYaw = config.showYawFP;
 				showVelocity = config.showVelocityFP;
@@ -207,8 +207,8 @@ public class ElytraPitch implements ModInitializer {
 				double durability = (double) (elytraItem.getMaxDamage() - elytraItem.getDamage()) / elytraItem.getMaxDamage();
 				if (durability < config.durabilityThreshold) {
 					MutableText text = Text.literal("Elytra Durability Warning");
-					text.setStyle(text.getStyle().withColor(config.messageColor));
-					if (config.boldMessage)
+					text.setStyle(text.getStyle().withColor(config.warningColor));
+					if (config.warningBold)
 						text.setStyle(text.getStyle().withBold(true));
 					player.sendMessage(text, true);
 				}
@@ -222,8 +222,10 @@ public class ElytraPitch implements ModInitializer {
 				}
 			}
 			int optimalPitch = pitch > 0 ? config.descendAngle : config.ascendAngle;
-			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= config.indicatorWidth)
-				displayString = "[ " + displayString + " ]";
+			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= config.indicatorWidth) {
+				textColor = minecraft.gameRenderer.getCamera().isThirdPerson() ? config.hudColorOptimalTP : config.hudColorOptimalFP;
+				displayString = "《 " + displayString + " 》";
+			}
 
 			Window mainWindow = minecraft.getWindow();
 			TextRenderer textRenderer = minecraft.textRenderer;

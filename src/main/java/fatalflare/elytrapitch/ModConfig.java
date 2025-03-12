@@ -22,9 +22,12 @@ class ModConfig implements ConfigData {
     boolean optimalIndicatorFP = true;
     @ConfigEntry.Category("FP")
     @ConfigEntry.ColorPicker()
-    int textColorFP = 0xffffff;
+    int hudColorFP = 0xffffff;
     @ConfigEntry.Category("FP")
-    boolean textShadowFP = true;
+    @ConfigEntry.ColorPicker()
+    int hudColorOptimalFP = 0xffffff;
+    @ConfigEntry.Category("FP")
+    boolean hudShadowFP = true;
     @ConfigEntry.Category("FP")
     String hudDelimiterFP = "";
     @ConfigEntry.Category("FP")
@@ -48,9 +51,12 @@ class ModConfig implements ConfigData {
     boolean optimalIndicatorTP = true;
     @ConfigEntry.Category("TP")
     @ConfigEntry.ColorPicker()
-    int textColorTP = 0xffffff;
+    int hudColorTP = 0xffffff;
     @ConfigEntry.Category("TP")
-    boolean textShadowTP = true;
+    @ConfigEntry.ColorPicker()
+    int hudColorOptimalTP = 0xffffff;
+    @ConfigEntry.Category("TP")
+    boolean hudShadowTP = true;
     @ConfigEntry.Category("TP")
     String hudDelimiterTP = "";
     @ConfigEntry.Category("TP")
@@ -84,7 +90,7 @@ class ModConfig implements ConfigData {
     boolean durabilityPercentage = true;
     @ConfigEntry.Category("flightSettings")
     @ConfigEntry.ColorPicker()
-    int messageColor = 0xbe0000;
+    int warningColor = 0xbe0000;
     @ConfigEntry.Category("flightSettings")
-    boolean boldMessage = true;
+    boolean warningBold = true;
 }

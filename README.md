@@ -13,3 +13,4 @@ If the player is flying at 40-degree angles with the elytra, they can maintain t
 - ElytraPitch 1.4.1 added [Trinkets](https://modrinth.com/mod/trinkets) support (_e.g._, [Elytra Slot]([https://modrinth.com/mod/elytra-slot](https://modrinth.com/mod/elytra-slot))) and an optional HUD delimiter.
 - ElytraPitch 1.4.2 fixed crashes due to the absence of [Trinkets](https://modrinth.com/mod/trinkets) and/or presence of [Origins](https://modrinth.com/mod/origins).
 - ElytraPitch 1.4.3 moved the position of the optional elytra item above the HUD elements.
+- ElytraPitch 1.5.0 changed the indicator symbol and expanded the HUD color settings.
