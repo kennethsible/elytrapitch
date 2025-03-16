@@ -39,6 +39,14 @@ class ModConfig implements ConfigData {
     boolean showDurabilityFP = false;
     @ConfigEntry.Category("FP")
     boolean showElytraItemFP = false;
+    @ConfigEntry.Category("FP")
+    boolean showLastApexGain = true;
+    @ConfigEntry.Category("FP")
+    boolean showOverallGain = false;
+    @ConfigEntry.Category("FP")
+    boolean showLastApexHeight = false;
+    @ConfigEntry.Category("FP")
+    boolean advancedStatsInNewLine = false;
 
     // Third Person Settings
     @ConfigEntry.Category("TP")
