@@ -18,7 +18,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,10 @@ public class ElytraPitch implements ModInitializer {
 	private static boolean pitchLocked = false;
 	private static boolean inFlight = false;
 	private static float lockedPitch;
+	private double startHeight;
+	private double oldApex;
+	private int oldApexDiff;
+	private double oldYVelocity;
 
 	@Override
 	public void onInitialize() {
@@ -122,6 +128,10 @@ public class ElytraPitch implements ModInitializer {
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			if (player == null || !player.isFallFlying() || !togglePitch) {
 				if (inFlight) inFlight = false;
+				if (player != null){
+					startHeight = player.getY();
+					oldApex = player.getY();
+				}
 				return;
 			}
 			if (pitchLocked) {
@@ -200,6 +210,8 @@ public class ElytraPitch implements ModInitializer {
 				}
 			}
 
+
+
 			ItemStack elytraItem = null;
 			if (FabricLoader.getInstance().isModLoaded("trinkets"))
 				elytraItem = TrinketsIntegration.getElytraItem(player);
@@ -225,13 +237,38 @@ public class ElytraPitch implements ModInitializer {
 						displayString += delimiterString + elytraItem.getDamage();
 				}
 			}
+			MutableText displayText = Text.literal(displayString);
+			MutableText advancedStatsText = Text.empty();
+			if(config.showLastApexGain|| config.showLastApexHeight || config.showOverallGain){
+				double yVelocity = player.getVelocity().getY();
+				if(config.showLastApexHeight) advancedStatsText.append(Text.literal(delimiterString + (int) oldApex).formatted(Formatting.GRAY));
+				if(config.showLastApexGain){
+					Formatting apexColor = oldApexDiff >= 0 ? Formatting.GREEN : Formatting.RED;
+					String apexIndicator = oldApexDiff >= 0 ? "+" : "";
+					advancedStatsText.append(Text.literal(delimiterString + apexIndicator + oldApexDiff).formatted(apexColor));
+				}
+				if(config.showOverallGain){
+					Formatting startColor = oldApex-startHeight >= 0 ? Formatting.GREEN : Formatting.RED;
+					String startIndicator = oldApex-startHeight >= 0 ? "+" : "";
+					advancedStatsText.append(Text.literal(delimiterString + startIndicator + (int)(oldApex-startHeight)).formatted(startColor));
+				}
+				if(!config.advancedStatsInNewLine){
+					displayText.append(advancedStatsText);
+				}
+				if (oldYVelocity > 0 && yVelocity < 0){
+					oldApexDiff = (int)(player.getY()- oldApex);
+					oldApex = player.getY();
+				}
+				oldYVelocity = player.getVelocity().getY();
+			}
+
 			int optimalPitch = pitch > 0 ? config.descendAngle : config.ascendAngle;
 			if (optimalIndicator && Math.abs(Math.abs(pitch) - Math.abs(optimalPitch)) <= config.indicatorWidth)
-				displayString = "[ " + displayString + " ]";
+				displayText = Text.literal("[ ").append(displayText).append(" ]");
 
 			Window mainWindow = minecraft.getWindow();
 			TextRenderer textRenderer = minecraft.textRenderer;
-			int xWidth = minecraft.textRenderer.getWidth(displayString);
+			int xWidth = minecraft.textRenderer.getWidth(displayText);
 			int yHeight = minecraft.textRenderer.fontHeight;
 			int xPos = (mainWindow.getScaledWidth() - xWidth) / 2;
 			int yPos = switch (screenPosition) {
@@ -239,10 +276,28 @@ public class ElytraPitch implements ModInitializer {
 				case MIDDLE_CENTER -> mainWindow.getScaledHeight() / 2 - yHeight * 5;
 				case TOP_CENTER -> yHeight * 5;
             };
-
 			if (showElytraItem && elytraItem != null)
 				drawContext.drawItem(elytraItem, (mainWindow.getScaledWidth() - 16) / 2, yPos - 16);
-			drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
+			drawContext.drawText(textRenderer, displayText, xPos, yPos, textColor, textShadow);
+			if (config.advancedStatsInNewLine){
+				int advXWidth = minecraft.textRenderer.getWidth(advancedStatsText);
+				drawContext.drawText(textRenderer, advancedStatsText, xPos+xWidth/2-advXWidth/2, yPos+yHeight, textColor, textShadow);
+			}
+//			double yVelocity = player.getVelocity().getY();
+//			Formatting apexColor = oldApexDiff >= 0 ? Formatting.GREEN : Formatting.RED;
+//			String apexIndicator = oldApexDiff >= 0 ? "++" : "-";
+//			MutableText apexText = Text.literal(String.valueOf((int) oldApex));
+//			MutableText diffText = Text.literal((apexIndicator) + oldApexDiff).formatted(apexColor);
+//			Formatting startColor = oldApex-startHeight >= 0 ? Formatting.GREEN : Formatting.RED;
+//			String startIndicator = oldApex-startHeight >= 0 ? "++" : "-";
+//			MutableText startDiffText = Text.literal((startIndicator) + (int)(oldApex-startHeight)).formatted(startColor);
+//			MutableText combined = apexText.append("; ").append(diffText).append("; ").append(startDiffText);
+//			drawContext.drawText(textRenderer, combined, xPos, yPos+yHeight, textColor, textShadow);
+//			if (oldYVelocity > 0 && yVelocity < 0){
+//				oldApexDiff = (int)(player.getY()- oldApex);
+//				oldApex = player.getY();
+//			}
+//			oldYVelocity = player.getVelocity().getY();
 		});
 	}
 }
