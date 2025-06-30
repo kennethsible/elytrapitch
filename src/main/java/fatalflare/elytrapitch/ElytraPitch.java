@@ -5,8 +5,7 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -48,9 +47,7 @@ public class ElytraPitch implements ModInitializer {
 		config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 		registerKeyBindings();
 		registerTickEvents();
-		HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> {
-			layeredDrawer.attachLayerBefore(IdentifiedLayer.CHAT, ELYTRA_PITCH_LAYER, this::render);
-		});
+		HudElementRegistry.addLast(ELYTRA_PITCH_LAYER, this::render);
 	}
 
 	private void registerKeyBindings() {
@@ -126,7 +123,7 @@ public class ElytraPitch implements ModInitializer {
 		if (minecraft.gameRenderer.getCamera().isThirdPerson()) {
 			screenPosition = config.screenPositionTP;
 			optimalIndicator = config.optimalIndicatorTP;
-			textColor = config.textColorTP;
+			textColor = config.textColorTP | 0xFF000000;;
 			textShadow = config.textShadowTP;
 			hudDelimiter = config.hudDelimiterTP;
 			showYaw = config.showYawTP;
@@ -138,7 +135,7 @@ public class ElytraPitch implements ModInitializer {
 		} else {
 			screenPosition = config.screenPositionFP;
 			optimalIndicator = config.optimalIndicatorFP;
-			textColor = config.textColorFP;
+			textColor = config.textColorFP | 0xFF000000;;
 			textShadow = config.textShadowFP;
 			hudDelimiter = config.hudDelimiterFP;
 			showYaw = config.showYawFP;
@@ -216,11 +213,6 @@ public class ElytraPitch implements ModInitializer {
 
 		if (showElytraItem && !elytraItem.isEmpty())
 			drawContext.drawItem(elytraItem, (mainWindow.getScaledWidth() - 16) / 2, yPos - 16);
-
-		if (textShadow) {
-			drawContext.drawTextWithShadow(textRenderer, displayString, xPos, yPos, textColor);
-		} else {
-			drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, false);
-		}
+		drawContext.drawText(textRenderer, displayString, xPos, yPos, textColor, textShadow);
 	}
 }
