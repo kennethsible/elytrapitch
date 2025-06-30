@@ -30,7 +30,7 @@
 		"java": ">=17",
 		"fabric-api": ">=${fabric_version}",
 		"fabric-key-binding-api-v1": "*",
-		"cloth-config": ">=11.1.118"
+		"cloth-config": ">=${cloth_config_version}"
 	},
 	"suggests": {
 		"modmenu": "*",
