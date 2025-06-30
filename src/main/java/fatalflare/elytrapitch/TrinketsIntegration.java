@@ -17,6 +17,6 @@ public class TrinketsIntegration extends TrinketsApi {
         if (component.isPresent())
             for (Pair<SlotReference, ItemStack> pair: component.get().getEquipped(Items.ELYTRA))
                 return pair.getRight();
-        return null;
+        return ItemStack.EMPTY;
     }
 }
