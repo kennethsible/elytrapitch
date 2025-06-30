@@ -50,7 +50,7 @@ dependencies {
 	}
 	modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
-	modCompileOnly("io.wispforest:accessories-fabric:${project.accessories_version}")
+//	modCompileOnly("io.wispforest:accessories-fabric:${project.accessories_version}")
 }
 
 processResources {

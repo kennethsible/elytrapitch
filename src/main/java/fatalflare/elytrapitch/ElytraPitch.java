@@ -15,6 +15,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.Window;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -171,15 +172,13 @@ public class ElytraPitch implements ModInitializer {
 		}
 
 		ItemStack elytraItem = ItemStack.EMPTY;
-		if (FabricLoader.getInstance().isModLoaded("accessories")) {
-			elytraItem = AccessoriesIntegration.getElytraItem(player);
-		}
+//		if (FabricLoader.getInstance().isModLoaded("accessories")) {
+//			elytraItem = AccessoriesIntegration.getElytraItem(player);
+//		}
 		if (elytraItem.isEmpty()) {
-			for (ItemStack stack : player.getArmorItems()) {
-				if (stack.getItem() == Items.ELYTRA) {
-					elytraItem = stack;
-					break;
-				}
+			ItemStack chestItem = player.getEquippedStack(EquipmentSlot.CHEST);
+			if (chestItem.isOf(Items.ELYTRA)) {
+				elytraItem = chestItem;
 			}
 		}
 		if (!elytraItem.isEmpty()) {
