@@ -169,6 +169,9 @@ public class ElytraPitch implements ModInitializer {
 		}
 
 		ItemStack elytraItem = ItemStack.EMPTY;
+		if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+			elytraItem = TrinketsIntegration.getElytraItem(player);
+		}
 //		if (FabricLoader.getInstance().isModLoaded("accessories")) {
 //			elytraItem = AccessoriesIntegration.getElytraItem(player);
 //		}
