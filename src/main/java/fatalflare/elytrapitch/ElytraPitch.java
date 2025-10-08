@@ -40,6 +40,7 @@ public class ElytraPitch implements ModInitializer {
 	private ModConfig config;
 
 	private static final Identifier ELYTRA_PITCH_LAYER = Identifier.of(MOD_ID, "elytra-pitch-layer");
+	private static final KeyBinding.Category ELYTRA_PITCH_CATEGORY = KeyBinding.Category.create(ELYTRA_PITCH_LAYER);
 
 	@Override
 	public void onInitialize() {
@@ -51,11 +52,11 @@ public class ElytraPitch implements ModInitializer {
 	}
 
 	private void registerKeyBindings() {
-		keyBinding1 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Toggle Flight HUD", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, MOD_NAME));
-		keyBinding2 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Toggle Pitch Lock", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MOD_NAME));
-		keyBinding3 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Ascend", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MOD_NAME));
-		keyBinding4 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Descend", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MOD_NAME));
-		keyBinding5 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Glide", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MOD_NAME));
+		keyBinding1 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Toggle Flight HUD", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, ELYTRA_PITCH_CATEGORY));
+		keyBinding2 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Toggle Pitch Lock", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, ELYTRA_PITCH_CATEGORY));
+		keyBinding3 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Ascend", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, ELYTRA_PITCH_CATEGORY));
+		keyBinding4 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Descend", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, ELYTRA_PITCH_CATEGORY));
+		keyBinding5 = KeyBindingHelper.registerKeyBinding(new KeyBinding("Snap to Glide", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, ELYTRA_PITCH_CATEGORY));
 	}
 
 	private void registerTickEvents() {
@@ -159,7 +160,7 @@ public class ElytraPitch implements ModInitializer {
 			}
 			displayString += delimiterString + yaw + "°";
 		} if (showAltitude) {
-			int altitude = (int) player.getY() - player.getWorld().getSeaLevel();
+			int altitude = (int) player.getY() - player.getEntityWorld().getSeaLevel();
 			displayString += delimiterString + altitude + "m";
 		} if (showVelocity) {
 			int velocity = (int) (player.getVelocity().length() * 20);

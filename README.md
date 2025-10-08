@@ -14,4 +14,4 @@ If the player is flying at 40-degree angles with the elytra, they can maintain t
 - ElytraPitch 1.4.2 fixed crashes due to the absence of [Trinkets](https://modrinth.com/mod/trinkets) and/or presence of [Origins](https://modrinth.com/mod/origins).
 - ElytraPitch 1.4.3 moved the position of the optional elytra item above the HUD elements.
 - ElytraPitch 1.4.4 added [Accessories](https://modrinth.com/mod/accessories) support for [Elytra Slot](https://modrinth.com/mod/elytra-slot) and refactored rendering code.
-- ElytraPitch 1.4.5 added [Trinkets Canary](https://modrinth.com/mod/trinkets-canary) support (_e.g._, [Elytra Trinket](https://modrinth.com/mod/elytra_trinket)) for Minecraft 1.21.8.
+- ElytraPitch 1.4.5 added [Trinkets Canary](https://modrinth.com/mod/trinkets-canary) support (_e.g._, [Elytra Trinket](https://modrinth.com/mod/elytra_trinket)) for Minecraft 1.21.8+.
