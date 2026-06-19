@@ -26,6 +26,10 @@ repositories {
 		name = "Ladysnake Libs"
 		url = 'https://maven.ladysnake.org/releases'
 	}
+	maven {
+		name = "Nucleoid"
+		url = 'https://maven.nucleoid.xyz/releases'
+	}
 	maven { url 'https://maven.wispforest.io/releases' }
 	maven { url 'https://maven.su5ed.dev/releases' }
 	maven { url 'https://maven.fabricmc.net' }
@@ -35,7 +39,6 @@ repositories {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-//	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -51,10 +54,8 @@ dependencies {
 	}
 	localRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
 	compileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
-	compileOnly("org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-	compileOnly("org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
-	compileOnly("maven.modrinth:trinkets-continued:${project.trinkets_version}")
-//	compileOnly("io.wispforest:accessories-fabric:${project.accessories_version}")
+//	compileOnly("maven.modrinth:trinkets-updated:${project.trinkets_version}")
+	implementation "eu.pb4:trinkets:${project.trinkets_version}"
 }
 
 processResources {

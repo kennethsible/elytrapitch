@@ -1,22 +1,19 @@
 package fatalflare.elytrapitch;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.util.Tuple;
+import eu.pb4.trinkets.api.TrinketAttachment;
+import eu.pb4.trinkets.api.TrinketSlotAccess;
+import eu.pb4.trinkets.api.TrinketsApi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.Optional;
-
-public class TrinketsIntegration extends TrinketsApi {
+public class TrinketsIntegration {
 
     public static ItemStack getElytraItem(Player player) {
-        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
-        if (component.isPresent())
-            for (Tuple<SlotReference, ItemStack> pair: component.get().getEquipped(Items.ELYTRA))
-                return pair.getB();
+        TrinketAttachment attachment = TrinketsApi.getAttachment(player);
+        for (TrinketSlotAccess slot : attachment.equipped(Items.ELYTRA, true)) {
+            return slot.get();
+        }
         return ItemStack.EMPTY;
     }
 }

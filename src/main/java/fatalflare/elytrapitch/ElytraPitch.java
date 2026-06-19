@@ -121,7 +121,7 @@ public class ElytraPitch implements ModInitializer {
 		int textColor;
 		boolean optimalIndicator, textShadow, showYaw, showVelocity, showAltitude, showDirection, showDurability, showElytraItem;
 
-		if (minecraft.gameRenderer.getMainCamera().isDetached()) {
+		if (minecraft.gameRenderer.mainCamera().isDetached()) {
 			screenPosition = config.screenPositionTP;
 			optimalIndicator = config.optimalIndicatorTP;
 			textColor = config.textColorTP | 0xFF000000;
@@ -173,9 +173,6 @@ public class ElytraPitch implements ModInitializer {
 		if (FabricLoader.getInstance().isModLoaded("trinkets")) {
 			elytraItem = TrinketsIntegration.getElytraItem(player);
 		}
-//		if (FabricLoader.getInstance().isModLoaded("accessories")) {
-//			elytraItem = AccessoriesIntegration.getElytraItem(player);
-//		}
 		if (elytraItem.isEmpty()) {
 			ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
 			if (chestItem.is(Items.ELYTRA)) {
